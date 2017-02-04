@@ -2,8 +2,13 @@ var app = (function () {
   var pixabayPublicKey = '4424166-feb46d87eba60cf69cbaa833f';
   var pageCounter = 1;
   var allPhotos = [];
+  var isPhotoExpanded = false;
 
   function expandImageByIndex(index) {
+    setTimeout(function () {
+      isPhotoExpanded = true;
+    }, 10);
+    // isPhotoExpanded = true;
     var photoToExpand = allPhotos[index];
     var expandedPhotoContainer = document.getElementById('expandedPhotoContainer');
     var expandedPhotoFragment = document.createDocumentFragment();
@@ -17,6 +22,7 @@ var app = (function () {
 
     expandedPhotoContainer.className += ' overlay';
     expandedPhoto.className += 'position--fixed mt';
+    expandedPhoto.id = 'expanded-photo';
 
     expandedImgEl.src = photoToExpand.webformatURL;
     expandedImgEl.className += 'expanded--image';
@@ -47,6 +53,15 @@ var app = (function () {
     expandedPhotoFragment.appendChild(expandedPhoto);
 
     expandedPhotoContainer.appendChild(expandedPhotoFragment);
+  }
+
+  function closeExpandedPhoto(e) {
+    if (isPhotoExpanded && !e.target.closest('#expanded-photo')) {
+      var expandedPhotoContainer = document.getElementById('expandedPhotoContainer');
+      expandedPhotoContainer.innerHTML = '';
+      expandedPhotoContainer.className = 'flex jc--c';
+      isPhotoExpanded = false;
+    }
   }
 
   function handleResponseData(responseData) {
@@ -104,6 +119,7 @@ var app = (function () {
   return {
     init: init,
     fetchPhotos: fetchPhotos,
+    closeExpandedPhoto: closeExpandedPhoto,
   }
 })();
 
@@ -111,3 +127,5 @@ app.init();
 
 var fetchMoreButton = document.getElementById('fetchMorePhotos');
 fetchMoreButton.addEventListener('click', app.fetchPhotos);
+
+document.addEventListener('click', app.closeExpandedPhoto);
