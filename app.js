@@ -2,10 +2,8 @@ var app = (function () {
   var pixabayPublicKey = '4424166-feb46d87eba60cf69cbaa833f';
   var pageCounter = 1;
   var allPhotos = [];
-  var currentExpandedPhotoIndex = 0;
 
   function expandImageByIndex(index) {
-    currentExpandedPhotoIndex = index;
     var photoToExpand = allPhotos[index];
     var expandedPhotoContainer = document.getElementById('expandedPhotoContainer');
     var expandedPhotoFragment = document.createDocumentFragment();
@@ -14,6 +12,8 @@ var app = (function () {
     var imageOverlay = document.createElement('div');
     var leftArrow = document.createElement('div');
     var rightArrow = document.createElement('div');
+
+    expandedPhotoContainer.innerHTML = '';
 
     expandedPhotoContainer.className += ' overlay';
     expandedPhoto.className += 'position--fixed mt';
@@ -25,6 +25,9 @@ var app = (function () {
 
     leftArrow.className += 'arrow--left';
     rightArrow.className += 'arrow--right';
+
+    leftArrow.addEventListener('click', expandImageByIndex.bind(this, index - 1));
+    rightArrow.addEventListener('click', expandImageByIndex.bind(this, index + 1));
 
     imageOverlay.appendChild(leftArrow);
     imageOverlay.appendChild(rightArrow);
