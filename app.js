@@ -1,5 +1,6 @@
 var app = (function () {
   var pixabayPublicKey = '4424166-feb46d87eba60cf69cbaa833f';
+  var pageCounter = 1;
 
   function handleResponseData(responseData) {
     var photos = responseData.hits;
@@ -38,9 +39,10 @@ var app = (function () {
       }
     }
 
-    endpoint = 'https://pixabay.com/api/?key=' + pixabayPublicKey;
+    endpoint = 'https://pixabay.com/api/?key=' + pixabayPublicKey + '&orientation=horizontal&per_page=50&page=' + pageCounter;
     photoRequest.open('GET', endpoint);
     photoRequest.send();
+    pageCounter ++;
   }
 
   function init() {
@@ -49,7 +51,11 @@ var app = (function () {
 
   return {
     init: init,
+    fetchPhotos: fetchPhotos,
   }
 })();
 
 app.init();
+
+var fetchMoreButton = document.getElementById('fetchMorePhotos');
+fetchMoreButton.addEventListener('click', app.fetchPhotos);

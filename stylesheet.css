@@ -5,6 +5,10 @@ html {
   box-sizing: inherit;
 }
 
+.mt {
+  margin-top: 20px;
+}
+
 .container {
   max-width: 1210px;
   margin: 0 auto;
@@ -78,4 +82,23 @@ html {
 
 .jc--c {
   justify-content: center;
+}
+
+.btn--default {
+  background-color: #3498db;
+  color: #fff;
+  display: inline-block;
+  font-size: 13px;
+  text-align: center;
+  border: none;
+  border-radius: 3px;
+  margin: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  line-height: normal;
+  padding: 10px;
+}
+
+.btn--default:hover {
+  background-color: #2980b9;
 }
