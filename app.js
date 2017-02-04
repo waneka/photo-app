@@ -3,8 +3,23 @@ var app = (function () {
 
   function handleResponseData(responseData) {
     var photos = responseData.hits;
+    var photo;
+    var thumbnailsContainer = document.getElementById('thumbnails');
 
-    console.log('photos: ', photos);
+    for (var i = 0; i < photos.length; i++) {
+      photo = photos[i];
+
+      var photoFragment = document.createDocumentFragment();
+      var thumbnail = document.createElement('div');
+      var imgEl = document.createElement('img');
+      thumbnail.className += 'grid__item col-1-8 flex ai--c';
+      imgEl.src = photo.previewURL;
+
+      photoFragment.appendChild(thumbnail);
+      thumbnail.appendChild(imgEl);
+
+      thumbnailsContainer.appendChild(photoFragment);
+    }
   }
 
   function fetchPhotos() {
