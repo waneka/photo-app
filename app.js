@@ -29,8 +29,17 @@ var app = (function () {
     leftArrow.addEventListener('click', expandImageByIndex.bind(this, index - 1));
     rightArrow.addEventListener('click', expandImageByIndex.bind(this, index + 1));
 
-    imageOverlay.appendChild(leftArrow);
-    imageOverlay.appendChild(rightArrow);
+    if (index > 0) {
+      imageOverlay.appendChild(leftArrow);
+    } else {
+      imageOverlay.appendChild(document.createElement('div'));
+    }
+
+    if (index < allPhotos.length - 1) {
+      imageOverlay.appendChild(rightArrow);
+    } else {
+      imageOverlay.appendChild(document.createElement('div'));
+    }
 
     expandedPhoto.appendChild(expandedImgEl);
     expandedPhoto.appendChild(imageOverlay);
