@@ -142,6 +142,15 @@ body {
   width: 100%;
 }
 
+.description {
+  align-self: flex-end;
+  padding: 10px;
+  background-color: #fff;
+  opacity: .8;
+  margin-bottom: 20px;
+  display: none;
+}
+
 .image--overlay {
   position: absolute;
   top: 0;
@@ -149,6 +158,10 @@ body {
   width: 100%;
   justify-content: space-between;
   padding: 0 5px;
+}
+
+.image--overlay:hover > .description {
+  display: inline-block;
 }
 
 .image--overlay:hover > .arrow--right {
@@ -159,6 +172,14 @@ body {
   opacity: .5;
 }
 
+.arrow--right:hover {
+  opacity: .8 !important;
+}
+
+.arrow--left:hover {
+  opacity: .8 !important;
+}
+
 .arrow--right {
   width: 0;
   height: 0;
@@ -167,6 +188,7 @@ body {
   border-left: 25px solid #fff;
   opacity: 0;
   align-self: center;
+  cursor: pointer;
 }
 
 .arrow--left {
@@ -177,8 +199,13 @@ body {
   border-right: 25px solid #fff;
   opacity: 0;
   align-self: center;
+  cursor: pointer;
 }
 
 .p-- {
   padding: 5px;
+}
+
+.mb\+ {
+  margin-bottom: 40px;
 }

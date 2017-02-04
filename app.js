@@ -5,10 +5,6 @@ var app = (function () {
   var isPhotoExpanded = false;
 
   function expandImageByIndex(index) {
-    setTimeout(function () {
-      isPhotoExpanded = true;
-    }, 10);
-    // isPhotoExpanded = true;
     var photoToExpand = allPhotos[index];
     var expandedPhotoContainer = document.getElementById('expandedPhotoContainer');
     var expandedPhotoFragment = document.createDocumentFragment();
@@ -17,6 +13,11 @@ var app = (function () {
     var imageOverlay = document.createElement('div');
     var leftArrow = document.createElement('div');
     var rightArrow = document.createElement('div');
+    var description = document.createElement('div');
+
+    setTimeout(function () {
+      isPhotoExpanded = true;
+    }, 10);
 
     expandedPhotoContainer.innerHTML = '';
 
@@ -32,6 +33,9 @@ var app = (function () {
     leftArrow.className += 'arrow--left';
     rightArrow.className += 'arrow--right';
 
+    description.className += 'description';
+    description.innerHTML = photoToExpand.tags;
+
     leftArrow.addEventListener('click', expandImageByIndex.bind(this, index - 1));
     rightArrow.addEventListener('click', expandImageByIndex.bind(this, index + 1));
 
@@ -40,6 +44,8 @@ var app = (function () {
     } else {
       imageOverlay.appendChild(document.createElement('div'));
     }
+
+    imageOverlay.appendChild(description);
 
     if (index < allPhotos.length - 1) {
       imageOverlay.appendChild(rightArrow);
