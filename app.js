@@ -11,13 +11,27 @@ var app = (function () {
     var expandedPhotoFragment = document.createDocumentFragment();
     var expandedPhoto = document.createElement('div');
     var expandedImgEl = document.createElement('img');
+    var imageOverlay = document.createElement('div');
+    var leftArrow = document.createElement('div');
+    var rightArrow = document.createElement('div');
 
     expandedPhotoContainer.className += ' overlay';
     expandedPhoto.className += 'position--fixed mt';
+
     expandedImgEl.src = photoToExpand.webformatURL;
     expandedImgEl.className += 'expanded--image';
 
+    imageOverlay.className += 'flex image--overlay';
+
+    leftArrow.className += 'arrow--left';
+    rightArrow.className += 'arrow--right';
+
+    imageOverlay.appendChild(leftArrow);
+    imageOverlay.appendChild(rightArrow);
+
     expandedPhoto.appendChild(expandedImgEl);
+    expandedPhoto.appendChild(imageOverlay);
+
     expandedPhotoFragment.appendChild(expandedPhoto);
 
     expandedPhotoContainer.appendChild(expandedPhotoFragment);

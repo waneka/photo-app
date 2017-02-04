@@ -141,3 +141,44 @@ body {
 .expanded--image {
   width: 100%;
 }
+
+.image--overlay {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0 5px;
+}
+
+.image--overlay:hover > .arrow--right {
+  opacity: .5;
+}
+
+.image--overlay:hover > .arrow--left {
+  opacity: .5;
+}
+
+.arrow--right {
+  width: 0;
+  height: 0;
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+  border-left: 25px solid #fff;
+  opacity: 0;
+  align-self: center;
+}
+
+.arrow--left {
+  width: 0;
+  height: 0;
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+  border-right: 25px solid #fff;
+  opacity: 0;
+  align-self: center;
+}
+
+.p-- {
+  padding: 5px;
+}
