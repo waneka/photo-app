@@ -15,10 +15,6 @@ var app = (function () {
     var rightArrow = document.createElement('div');
     var description = document.createElement('div');
 
-    setTimeout(function () {
-      isPhotoExpanded = true;
-    }, 10);
-
     expandedPhotoContainer.innerHTML = '';
 
     expandedPhotoContainer.classList.add('overlay');
