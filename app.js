@@ -2,70 +2,58 @@ var app = (function () {
   var pixabayPublicKey = '4424166-feb46d87eba60cf69cbaa833f';
   var pageCounter = 1;
   var allPhotos = [];
-  var isPhotoExpanded = false;
+  var expandedPhotoIndex = undefined;
+
+  function incrementExpandedIndex() {
+    expandedPhotoIndex ++;
+  }
+
+  function decrementExpandedIndex() {
+    expandedPhotoIndex --;
+  }
 
   function expandImageByIndex(index) {
+    index = index !== null ? index : expandedPhotoIndex;
     var photoToExpand = allPhotos[index];
-    var expandedPhotoContainer = document.getElementById('expandedPhotoContainer');
-    var expandedPhotoFragment = document.createDocumentFragment();
-    var expandedPhoto = document.createElement('div');
-    var expandedImgEl = document.createElement('img');
-    var imageOverlay = document.createElement('div');
-    var leftArrow = document.createElement('div');
-    var rightArrow = document.createElement('div');
-    var description = document.createElement('div');
-
-    expandedPhotoContainer.innerHTML = '';
-
-    expandedPhotoContainer.classList.add('overlay');
-    expandedPhoto.className = 'position--fixed mt';
-    expandedPhoto.id = 'expanded-photo';
+    var expandedPhotoContainer = document.getElementById('expanded-photo-container');
+    var expandedImgEl = document.getElementById('expanded-image');
+    var leftArrow = document.getElementById('left-arrow');
+    var rightArrow = document.getElementById('right-arrow');
+    var description = document.getElementById('photo-description');
 
     expandedImgEl.src = photoToExpand.webformatURL;
-    expandedImgEl.className += 'expanded--image';
-
-    imageOverlay.className = 'flex image--overlay';
-
-    leftArrow.className = 'arrow--left';
-    rightArrow.className = 'arrow--right';
-
-    description.className = 'description';
-    description.innerHTML = photoToExpand.tags;
-
-    leftArrow.addEventListener('click', expandImageByIndex.bind(this, index - 1));
-    rightArrow.addEventListener('click', expandImageByIndex.bind(this, index + 1));
-
-    if (index > 0) {
-      imageOverlay.appendChild(leftArrow);
-    } else {
-      imageOverlay.appendChild(document.createElement('div'));
-    }
-
-    imageOverlay.appendChild(description);
-
-    if (index < allPhotos.length - 1) {
-      imageOverlay.appendChild(rightArrow);
-    } else {
-      imageOverlay.appendChild(document.createElement('div'));
-    }
-
-    expandedPhoto.appendChild(expandedImgEl);
-    expandedPhoto.appendChild(imageOverlay);
-
-    expandedPhotoFragment.appendChild(expandedPhoto);
 
     expandedImgEl.addEventListener('load', function () {
-      expandedPhotoContainer.appendChild(expandedPhotoFragment);
-      isPhotoExpanded = true;
+      expandedPhotoContainer.classList.remove('hide');
+
+      leftArrow.className = 'arrow--left';
+      rightArrow.className = 'arrow--right';
+
+      description.innerHTML = photoToExpand.tags;
+
+      if (index > 0) {
+        leftArrow.classList.remove('hide');
+      } else {
+        leftArrow.classList.add('hide');
+      }
+
+      if (index < allPhotos.length - 1) {
+        rightArrow.classList.remove('hide');
+      } else {
+        rightArrow.classList.add('hide');
+      }
+
+      expandedPhotoIndex = index;
     });
   }
 
   function closeExpandedPhoto(e) {
-    if (isPhotoExpanded && !e.target.closest('#expanded-photo')) {
-      var expandedPhotoContainer = document.getElementById('expandedPhotoContainer');
-      expandedPhotoContainer.innerHTML = '';
-      expandedPhotoContainer.classList.remove('overlay');
-      isPhotoExpanded = false;
+    if (expandedPhotoIndex && !e.target.closest('#expanded-photo')) {
+      var expandedPhotoContainer = document.getElementById('expanded-photo-container');
+      var expandedImgEl = document.getElementById('expanded-image');
+      expandedPhotoContainer.classList.add('hide');
+      expandedImgEl.src = '';
+      expandedPhotoIndex = undefined;
     }
   }
 
@@ -73,18 +61,17 @@ var app = (function () {
     var loader = document.getElementById('loader');
 
     if (show) {
-      loader.classList.add('show');
-      loader.classList.remove('hide');
+      loader.classList.add('is-showing');
+      loader.classList.remove('is-hiding');
     } else {
-      loader.classList.add('hide');
-      loader.classList.remove('show');
+      loader.classList.add('is-hiding');
+      loader.classList.remove('is-showing');
     }
   }
 
   function handleResponseData(responseData) {
     var photos = responseData.hits;
     var photo;
-    var thumbnailsContainer = document.getElementById('thumbnails');
     var currentPhotosLength = allPhotos.length;
     var batchedImages = [];
     var batchedCounter = 0;
@@ -147,20 +134,32 @@ var app = (function () {
     pageCounter ++;
   }
 
+  function bindEventListeners() {
+    var leftArrow = document.getElementById('left-arrow');
+    var rightArrow = document.getElementById('right-arrow');
+    var fetchMoreButton = document.getElementById('fetchMorePhotos');
+
+    leftArrow.addEventListener('click', function () {
+      decrementExpandedIndex();
+      expandImageByIndex(null);
+    })
+    rightArrow.addEventListener('click', function () {
+      incrementExpandedIndex();
+      expandImageByIndex(null);
+    })
+    fetchMoreButton.addEventListener('click', fetchPhotos);
+
+    document.addEventListener('click', closeExpandedPhoto);
+  }
+
   function init() {
     fetchPhotos();
+    bindEventListeners();
   }
 
   return {
     init: init,
-    fetchPhotos: fetchPhotos,
-    closeExpandedPhoto: closeExpandedPhoto,
   }
 })();
 
 app.init();
-
-var fetchMoreButton = document.getElementById('fetchMorePhotos');
-fetchMoreButton.addEventListener('click', app.fetchPhotos);
-
-document.addEventListener('click', app.closeExpandedPhoto);

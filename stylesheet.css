@@ -270,13 +270,17 @@ body {
   animation: ball-float 1s infinite ease-in-out;
 }
 
-.hide {
+.is-hiding {
   max-height: 0;
   overflow: hidden;
   transition: max-height .4s;
 }
 
-.show {
+.is-showing {
   max-height: 100px;
   transition: max-height: .4s;
+}
+
+.hide {
+  display: none;
 }
