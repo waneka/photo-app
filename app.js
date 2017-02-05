@@ -65,8 +65,20 @@ var app = (function () {
     if (isPhotoExpanded && !e.target.closest('#expanded-photo')) {
       var expandedPhotoContainer = document.getElementById('expandedPhotoContainer');
       expandedPhotoContainer.innerHTML = '';
-      expandedPhotoContainer.className = 'flex jc--c';
+      expandedPhotoContainer.classList.remove('overlay');
       isPhotoExpanded = false;
+    }
+  }
+
+  function toggleLoader(show) {
+    var loader = document.getElementById('loader');
+
+    if (show) {
+      loader.classList.add('show');
+      loader.classList.remove('hide');
+    } else {
+      loader.classList.add('hide');
+      loader.classList.remove('show');
     }
   }
 
@@ -75,28 +87,45 @@ var app = (function () {
     var photo;
     var thumbnailsContainer = document.getElementById('thumbnails');
     var currentPhotosLength = allPhotos.length;
+    var promises = [];
 
     for (var i = 0; i < photos.length; i++) {
-      photo = photos[i];
-      allPhotos.push(photo);
+      var promise = new Promise(function (resolve) {
+        photo = photos[i];
+        allPhotos.push(photo);
 
-      var photoFragment = document.createDocumentFragment();
-      var thumbnail = document.createElement('div');
-      var imgEl = document.createElement('img');
-      thumbnail.className += 'grid__item col-1-8 flex ai--c';
-      imgEl.src = photo.previewURL;
-      imgEl.className += 'thumbnail--image'
+        var photoFragment = document.createDocumentFragment();
+        var thumbnail = document.createElement('div');
+        var imgEl = document.createElement('img');
+        thumbnail.className += 'grid__item col-1-8 flex ai--c';
+        imgEl.src = photo.previewURL;
+        imgEl.className += 'thumbnail--image'
 
-      imgEl.addEventListener('click', expandImageByIndex.bind(this, currentPhotosLength + i));
+        imgEl.addEventListener('click', expandImageByIndex.bind(this, currentPhotosLength + i));
 
-      thumbnail.appendChild(imgEl);
-      photoFragment.appendChild(thumbnail);
+        thumbnail.appendChild(imgEl);
+        photoFragment.appendChild(thumbnail);
 
-      thumbnailsContainer.appendChild(photoFragment);
+        imgEl.addEventListener('load', function () {
+          resolve(photoFragment);
+        });
+      });
+
+      promises.push(promise);
     }
+
+    Promise.all(promises)
+      .then(function (fragments) {
+        toggleLoader(false);
+
+        for (var j = 0; j < fragments.length; j++) {
+          thumbnailsContainer.appendChild(fragments[j]);
+        }
+      })
   }
 
   function fetchPhotos() {
+    toggleLoader(true);
     var photoRequest = new XMLHttpRequest();
     var endpoint;
     var responseData;

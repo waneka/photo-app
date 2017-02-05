@@ -209,3 +209,74 @@ body {
 .mb\+ {
   margin-bottom: 40px;
 }
+
+/* Loader */
+@-webkit-keyframes ball-float {
+  0%, 100% {
+     -webkit-transform: translateY(0);
+     transform: translateY(0);
+  }
+  50% {
+     -webkit-transform: translateY(-10px);
+     transform: translateY(-10px);
+  }
+}
+
+@keyframes ball-float {
+  0%, 100% {
+     -webkit-transform: translateY(0);
+     transform: translateY(0);
+  }
+  50% {
+     -webkit-transform: translateY(-10px);
+     transform: translateY(-10px);
+  }
+}
+
+.floating-balls--container {
+  height: 20px;
+  width: 140px;
+  display: flex;
+}
+
+.floating-ball {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  margin: 0 4px;
+}
+
+.floating-ball--1,
+.floating-ball--5 {
+  background-color: #bdc3c7;
+  -webkit-animation: ball-float 1s infinite ease-in-out;
+  animation: ball-float 1s infinite ease-in-out;
+  -webkit-animation-delay: .4s;
+  animation-delay: .4s;
+}
+
+.floating-ball--2,
+.floating-ball--4 {
+  background-color: #95a5a6;
+  -webkit-animation: ball-float 1s infinite ease-in-out;
+  animation: ball-float 1s infinite ease-in-out;
+  -webkit-animation-delay: .2s;
+  animation-delay: .2s;
+}
+
+.floating-ball--3 {
+  background-color: #7f8c8d;
+  -webkit-animation: ball-float 1s infinite ease-in-out;
+  animation: ball-float 1s infinite ease-in-out;
+}
+
+.hide {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .4s;
+}
+
+.show {
+  max-height: 100px;
+  transition: max-height: .4s;
+}
