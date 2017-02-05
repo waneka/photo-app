@@ -90,41 +90,42 @@ var app = (function () {
     var photo;
     var thumbnailsContainer = document.getElementById('thumbnails');
     var currentPhotosLength = allPhotos.length;
-    var promises = [];
+    var batchedImages = [];
+    var batchedCounter = 0;
 
-    for (var i = 0; i < photos.length; i++) {
-      var promise = new Promise(function (resolve) {
-        photo = photos[i];
-        allPhotos.push(photo);
+    photos.forEach(function (photo, index) {
 
-        var photoFragment = document.createDocumentFragment();
-        var thumbnail = document.createElement('div');
-        var imgEl = document.createElement('img');
-        thumbnail.className = 'grid__item col-1-8 flex ai--c';
-        imgEl.src = photo.previewURL;
-        imgEl.className = 'thumbnail--image'
+      allPhotos.push(photo);
 
-        imgEl.addEventListener('click', expandImageByIndex.bind(this, currentPhotosLength + i));
+      var photoFragment = document.createDocumentFragment();
+      var thumbnail = document.createElement('div');
+      var imgEl = document.createElement('img');
+      thumbnail.className = 'grid__item col-1-8 flex ai--c';
+      imgEl.src = photo.previewURL;
+      imgEl.className = 'thumbnail--image'
 
-        thumbnail.appendChild(imgEl);
-        photoFragment.appendChild(thumbnail);
+      imgEl.addEventListener('click', expandImageByIndex.bind(this, currentPhotosLength + index));
 
-        imgEl.addEventListener('load', function () {
-          resolve(photoFragment);
-        });
-      });
+      thumbnail.appendChild(imgEl);
+      photoFragment.appendChild(thumbnail);
+      batchedImages.push(photoFragment);
 
-      promises.push(promise);
-    }
-
-    Promise.all(promises)
-      .then(function (fragments) {
-        toggleLoader(false);
-
-        for (var j = 0; j < fragments.length; j++) {
-          thumbnailsContainer.appendChild(fragments[j]);
+      imgEl.addEventListener('load', function () {
+        batchedCounter ++;
+        if (batchedCounter === photos.length) {
+          renderBatchedImages(batchedImages);
+          toggleLoader(false);
         }
-      })
+      });
+    });
+  }
+
+  function renderBatchedImages(fragments) {
+    var thumbnailsContainer = document.getElementById('thumbnails');
+
+    fragments.forEach(function (fragment) {
+      thumbnailsContainer.appendChild(fragment);
+    });
   }
 
   function fetchPhotos() {
