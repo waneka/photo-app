@@ -21,19 +21,19 @@ var app = (function () {
 
     expandedPhotoContainer.innerHTML = '';
 
-    expandedPhotoContainer.className += ' overlay';
-    expandedPhoto.className += 'position--fixed mt';
+    expandedPhotoContainer.classList.add('overlay');
+    expandedPhoto.className = 'position--fixed mt';
     expandedPhoto.id = 'expanded-photo';
 
     expandedImgEl.src = photoToExpand.webformatURL;
     expandedImgEl.className += 'expanded--image';
 
-    imageOverlay.className += 'flex image--overlay';
+    imageOverlay.className = 'flex image--overlay';
 
-    leftArrow.className += 'arrow--left';
-    rightArrow.className += 'arrow--right';
+    leftArrow.className = 'arrow--left';
+    rightArrow.className = 'arrow--right';
 
-    description.className += 'description';
+    description.className = 'description';
     description.innerHTML = photoToExpand.tags;
 
     leftArrow.addEventListener('click', expandImageByIndex.bind(this, index - 1));
@@ -97,9 +97,9 @@ var app = (function () {
         var photoFragment = document.createDocumentFragment();
         var thumbnail = document.createElement('div');
         var imgEl = document.createElement('img');
-        thumbnail.className += 'grid__item col-1-8 flex ai--c';
+        thumbnail.className = 'grid__item col-1-8 flex ai--c';
         imgEl.src = photo.previewURL;
-        imgEl.className += 'thumbnail--image'
+        imgEl.className = 'thumbnail--image'
 
         imgEl.addEventListener('click', expandImageByIndex.bind(this, currentPhotosLength + i));
 
