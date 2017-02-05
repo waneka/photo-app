@@ -5,71 +5,63 @@ var app = (function () {
   var isPhotoExpanded = false;
 
   function expandImageByIndex(index) {
-    var expandPromise = new Promise(function (resolve) {
-      var photoToExpand = allPhotos[index];
-      var expandedPhotoContainer = document.getElementById('expandedPhotoContainer');
-      var expandedPhotoFragment = document.createDocumentFragment();
-      var expandedPhoto = document.createElement('div');
-      var expandedImgEl = document.createElement('img');
-      var imageOverlay = document.createElement('div');
-      var leftArrow = document.createElement('div');
-      var rightArrow = document.createElement('div');
-      var description = document.createElement('div');
+    var photoToExpand = allPhotos[index];
+    var expandedPhotoContainer = document.getElementById('expandedPhotoContainer');
+    var expandedPhotoFragment = document.createDocumentFragment();
+    var expandedPhoto = document.createElement('div');
+    var expandedImgEl = document.createElement('img');
+    var imageOverlay = document.createElement('div');
+    var leftArrow = document.createElement('div');
+    var rightArrow = document.createElement('div');
+    var description = document.createElement('div');
 
-      setTimeout(function () {
-        isPhotoExpanded = true;
-      }, 10);
+    setTimeout(function () {
+      isPhotoExpanded = true;
+    }, 10);
 
-      expandedPhotoContainer.innerHTML = '';
+    expandedPhotoContainer.innerHTML = '';
 
-      expandedPhotoContainer.classList.add('overlay');
-      expandedPhoto.className = 'position--fixed mt';
-      expandedPhoto.id = 'expanded-photo';
+    expandedPhotoContainer.classList.add('overlay');
+    expandedPhoto.className = 'position--fixed mt';
+    expandedPhoto.id = 'expanded-photo';
 
-      expandedImgEl.src = photoToExpand.webformatURL;
-      expandedImgEl.className += 'expanded--image';
+    expandedImgEl.src = photoToExpand.webformatURL;
+    expandedImgEl.className += 'expanded--image';
 
-      imageOverlay.className = 'flex image--overlay';
+    imageOverlay.className = 'flex image--overlay';
 
-      leftArrow.className = 'arrow--left';
-      rightArrow.className = 'arrow--right';
+    leftArrow.className = 'arrow--left';
+    rightArrow.className = 'arrow--right';
 
-      description.className = 'description';
-      description.innerHTML = photoToExpand.tags;
+    description.className = 'description';
+    description.innerHTML = photoToExpand.tags;
 
-      leftArrow.addEventListener('click', expandImageByIndex.bind(this, index - 1));
-      rightArrow.addEventListener('click', expandImageByIndex.bind(this, index + 1));
+    leftArrow.addEventListener('click', expandImageByIndex.bind(this, index - 1));
+    rightArrow.addEventListener('click', expandImageByIndex.bind(this, index + 1));
 
-      if (index > 0) {
-        imageOverlay.appendChild(leftArrow);
-      } else {
-        imageOverlay.appendChild(document.createElement('div'));
-      }
+    if (index > 0) {
+      imageOverlay.appendChild(leftArrow);
+    } else {
+      imageOverlay.appendChild(document.createElement('div'));
+    }
 
-      imageOverlay.appendChild(description);
+    imageOverlay.appendChild(description);
 
-      if (index < allPhotos.length - 1) {
-        imageOverlay.appendChild(rightArrow);
-      } else {
-        imageOverlay.appendChild(document.createElement('div'));
-      }
+    if (index < allPhotos.length - 1) {
+      imageOverlay.appendChild(rightArrow);
+    } else {
+      imageOverlay.appendChild(document.createElement('div'));
+    }
 
-      expandedPhoto.appendChild(expandedImgEl);
-      expandedPhoto.appendChild(imageOverlay);
+    expandedPhoto.appendChild(expandedImgEl);
+    expandedPhoto.appendChild(imageOverlay);
 
-      expandedPhotoFragment.appendChild(expandedPhoto);
+    expandedPhotoFragment.appendChild(expandedPhoto);
 
-      expandedImgEl.addEventListener('load', function () {
-        resolve(expandedPhotoFragment);
-      });
-
-    })
-
-    expandPromise
-      .then(function (fragment) {
-        expandedPhotoContainer.appendChild(fragment);
-        isPhotoExpanded = true;
-      });
+    expandedImgEl.addEventListener('load', function () {
+      expandedPhotoContainer.appendChild(expandedPhotoFragment);
+      isPhotoExpanded = true;
+    });
   }
 
   function closeExpandedPhoto(e) {
