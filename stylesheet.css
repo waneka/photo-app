@@ -284,3 +284,7 @@ body {
 .hide {
   display: none;
 }
+
+.color--error {
+  color: #c0392b;
+}
